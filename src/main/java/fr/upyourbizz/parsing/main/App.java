@@ -1,10 +1,10 @@
-package fr.upyourbizz.articles.ajout.automatique;
+package fr.upyourbizz.parsing.main;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import fr.upyourbizz.aspiration.composants.Contexte;
-import fr.upyourbizz.aspiration.magento.Parser;
+import fr.upyourbizz.core.Contexte;
+import fr.upyourbizz.parsing.magento.Parser;
 
 /**
  * Hello world!

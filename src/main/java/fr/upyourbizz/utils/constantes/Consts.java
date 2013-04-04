@@ -17,6 +17,8 @@ public final class Consts {
     /** System property - <tt>path.separator</tt> */
     public static final String PATH_SEPARATOR = System.getProperty("path.separator");
 
+    public static final String JSOUP_PARSER_DEFAULT_PARSING_STRING = "<html><body>File not found</body></html>";
+
     /** Séparateur d'article CSV</tt> */
     public static final String CSV_ITEM_SEPARATOR = ";";
 

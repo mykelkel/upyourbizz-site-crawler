@@ -1,7 +1,7 @@
 /**
  * 
  */
-package fr.upyourbizz.aspiration.magento;
+package fr.upyourbizz.parsing.magento;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -11,8 +11,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import fr.upyourbizz.aspiration.composants.Category;
-import fr.upyourbizz.aspiration.composants.ResultatParsingSousCategorie;
+import fr.upyourbizz.core.Category;
 
 /**
  * @author Mikael THIBAULT
@@ -56,8 +55,10 @@ public class ParserSousCategorie {
 
                         // On crée la nouvelle catégorie
                         List<Category> nouvelleListeCategorie = new ArrayList<Category>();
-                        nouvelleListeCategorie.add(new Category(nouvelleSousCategorieName,
-                                nouvelleSousCategorieLink));
+                        Category newCategory = new Category(nouvelleSousCategorieName,
+                                nouvelleSousCategorieLink);
+                        newCategory.setParentCategory(subCategory);
+                        nouvelleListeCategorie.add(newCategory);
                         if (!resultat.getMapAutresSousCategories().containsKey(subCategory)) {
                             resultat.getMapAutresSousCategories().put(subCategory,
                                     nouvelleListeCategorie);

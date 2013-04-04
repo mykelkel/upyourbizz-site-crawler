@@ -1,7 +1,7 @@
 /**
  * 
  */
-package fr.upyourbizz.aspiration.magento;
+package fr.upyourbizz.parsing.magento;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,7 +13,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import fr.upyourbizz.aspiration.composants.Article;
+import fr.upyourbizz.core.Article;
 import fr.upyourbizz.utils.constantes.Consts;
 
 /**

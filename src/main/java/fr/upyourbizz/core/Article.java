@@ -1,7 +1,7 @@
 /**
  * 
  */
-package fr.upyourbizz.aspiration.composants;
+package fr.upyourbizz.core;
 
 import java.util.List;
 
@@ -52,8 +52,9 @@ public class Article {
     public String extractCsvInfos() {
         StringBuilder result = new StringBuilder();
         result.append(categorie + Consts.CSV_ITEM_SEPARATOR + nom + Consts.CSV_ITEM_SEPARATOR
-                + prix + Consts.CSV_ITEM_SEPARATOR + Consts.CSV_ITEM_SEPARATOR + description
-                + marque + Consts.CSV_ITEM_SEPARATOR + urlImgMarqueProduit);
+                + prix + Consts.CSV_ITEM_SEPARATOR + "\"" + description + "\""
+                + Consts.CSV_ITEM_SEPARATOR + marque + Consts.CSV_ITEM_SEPARATOR
+                + urlImgMarqueProduit);
         return result.toString();
     }
 

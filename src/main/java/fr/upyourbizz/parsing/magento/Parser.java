@@ -1,10 +1,9 @@
 /**
  * 
  */
-package fr.upyourbizz.aspiration.magento;
+package fr.upyourbizz.parsing.magento;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,13 +12,12 @@ import java.util.Map.Entry;
 
 import org.jsoup.nodes.Document;
 
-import fr.upyourbizz.aspiration.composants.Article;
-import fr.upyourbizz.aspiration.composants.Category;
-import fr.upyourbizz.aspiration.composants.Contexte;
-import fr.upyourbizz.aspiration.composants.Navigation;
-import fr.upyourbizz.aspiration.composants.ResultatParsingSousCategorie;
+import fr.upyourbizz.core.Article;
+import fr.upyourbizz.core.Category;
+import fr.upyourbizz.core.Contexte;
+import fr.upyourbizz.core.Navigation;
+import fr.upyourbizz.export.csv.ExportProducts;
 import fr.upyourbizz.utils.Utils;
-import fr.upyourbizz.utils.filescan.FileUtil;
 
 /**
  * @author Mikael THIBAULT
@@ -32,6 +30,9 @@ public class Parser {
 
     private Utils utils;
 
+    /**
+     * @return
+     */
     public List<String> extractProductUrlFromInternet() {
         String urlAccueilSite = contexte.getHomePageUrl();
         boolean enregistrerFichier = contexte.isSaveFile();
@@ -106,33 +107,36 @@ public class Parser {
             mapTmp = mapNewSubCategory;
         }
 
+        List<Article> listeArticle = new ArrayList<Article>();
         for (Entry<Category, List<Category>> category : navigation.getMapNavigation().entrySet()) {
             System.out.println("Categorie = " + category.getKey().getName());
             for (Category subCategory : category.getValue()) {
                 List<String> listeUrl = subCategory.getUrlRelatedProducts();
-                int compteur = 10;
-                if (listeUrl.size() < 10) {
-                    compteur = listeUrl.size();
-                }
-                for (int i = 0; i < compteur; i++) {
+                for (String url : listeUrl) {
                     Document documentHTML;
                     try {
-                        documentHTML = utils.readFileOrUrl(listeUrl.get(i));
-
-                        Article article = ParserArticle.parserInformationArticle(documentHTML);
-                        System.out.println(article.extractCsvInfos());
+                        documentHTML = utils.readFileOrUrl(url);
+                        if (documentHTML != null) {
+                            Article article = ParserArticle.parserInformationArticle(documentHTML);
+                            article.setCategorie(subCategory.calculateProductCategoriesCsv());
+                            listeArticle.add(article);
+                            System.out.println(article.extractCsvInfos());
+                        }
                     }
                     catch (IOException e) {
-                        if (contexte.isDownloadFileIfMissing()) {
-                            downloadFile(e);
-                        }
-                        else {
-                            e.printStackTrace();
-                        }
+                        e.printStackTrace();
                     }
                 }
+                break;
             }
             break;
+        }
+
+        try {
+            ExportProducts.createProductsCsvFile(listeArticle);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
         }
         // System.out.println(barreNavigation.toString());
         // List<String> urlsSousCategorie = barreNavigation
@@ -200,34 +204,6 @@ public class Parser {
         }
     }
 
-    // private ResultatParsingSousCategorie parsingSousCategorie(String
-    // urlSousCategorie,
-    // boolean enregistrerFichier) {
-    // ResultatParsingSousCategorie resultatParsingSousCategorie = new
-    // ResultatParsingSousCategorie();
-    // try {
-    // resultatParsingSousCategorie = ParserSousCategorie.parserSousCategorie(
-    // urlSousCategorie, true, enregistrerFichier);
-    // List<String> urlsSousPage =
-    // resultatParsingSousCategorie.getListeAutrePagesAParserMemeCategorie();
-    // if (!urlsSousPage.isEmpty()) {
-    // for (String urlSousPage : urlsSousPage) {
-    // ResultatParsingSousCategorie
-    // resultatParsingSousCategoriePageSupplementaire =
-    // ParserSousCategorie.parserSousCategorie(
-    // urlSousPage, false, true);
-    // resultatParsingSousCategorie.getListeUrlArticlesTrouves().addAll(
-    // resultatParsingSousCategoriePageSupplementaire.getListeUrlArticlesTrouves());
-    // }
-    // }
-    //
-    // }
-    // catch (IOException e) {
-    // e.printStackTrace();
-    // }
-    // return resultatParsingSousCategorie;
-    // }
-
     private ResultatParsingSousCategorie parseSubCategoryFromDisk(Category subCategory,
             boolean downloadFileIfMissing) {
         ResultatParsingSousCategorie resultatParsingSousCategorie = new ResultatParsingSousCategorie();
@@ -248,31 +224,9 @@ public class Parser {
 
         }
         catch (IOException e) {
-            if (contexte.isDownloadFileIfMissing()) {
-                downloadFile(e);
-            }
-            else {
-                e.printStackTrace();
-            }
+            e.printStackTrace();
         }
         return resultatParsingSousCategorie;
-    }
-
-    private void downloadFile(IOException e) {
-        String message = e.getMessage();
-        String[] messageSplit = message.split(" ");
-        String fileNotFound = messageSplit[0];
-        System.err.println("Fichier " + messageSplit[0] + " non trouvé");
-        try {
-            System.out.println("Re-téléchargement du fichier " + fileNotFound);
-            FileUtil.saveFileToDisk("http://" + fileNotFound);
-        }
-        catch (MalformedURLException e1) {
-            e1.printStackTrace();
-        }
-        catch (IOException e1) {
-            e1.printStackTrace();
-        }
     }
 
     // ==== Accesseurs =================================

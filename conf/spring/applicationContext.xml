@@ -4,12 +4,12 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
            http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-	<bean id="contexte" class="fr.upyourbizz.aspiration.composants.Contexte" />
-	<bean id="navigation" class="fr.upyourbizz.aspiration.composants.Navigation" />
+	<bean id="contexte" class="fr.upyourbizz.core.Contexte" />
+	<bean id="navigation" class="fr.upyourbizz.core.Navigation" />
 	<bean id="utils" class="fr.upyourbizz.utils.Utils">
 		<property name="contexte" ref="contexte" />
 	</bean>
-	<bean id="parser" class="fr.upyourbizz.aspiration.magento.Parser">
+	<bean id="parser" class="fr.upyourbizz.parsing.magento.Parser">
 		<property name="navigation" ref="navigation" />
 		<property name="contexte" ref="contexte" />
 		<property name="utils" ref="utils" />

@@ -1,12 +1,14 @@
 /**
  * 
  */
-package fr.upyourbizz.aspiration.composants;
+package fr.upyourbizz.parsing.magento;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import fr.upyourbizz.core.Category;
 
 /**
  * @author Mikael THIBAULT

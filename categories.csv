@@ -1,3 +1,4 @@
+1;Packs;;0
 1;DJ Shop;;0
 1;Accessoires Disques;DJ Shop;0
 1;Câbles et Connectiques Audio;DJ Shop;0
@@ -15,31 +16,7 @@
 1;Sacoches et Bags DJ;DJ Shop;0
 1;Tables de mixage DJ;DJ Shop;0
 1;Vidéo DJ;DJ Shop;0
-1;ACCUEIL;;0
 1;LOCATION;;0
-1;Eclairage;;0
-1;Blocs de puissance DMX;Eclairage;0
-1;Câbles et adptateurs DMX;Eclairage;0
-1;Commandes DMX;Eclairage;0
-1;Dispatchings;Eclairage;0
-1;Effets DJ à lampe;Eclairage;0
-1;Equipements Scéniques;Eclairage;0
-1;Flights et Bags de Transport;Eclairage;0
-1;Lampes;Eclairage;0
-1;Lasers;Eclairage;0
-1;LEDS;Eclairage;0
-1;Lumières Noires;Eclairage;0
-1;Lyres;Eclairage;0
-1;Machines à Fumée et Brouillard;Eclairage;0
-1;Machines à Neige et Bulles;Eclairage;0
-1;Modulateurs et Séquenceurs;Eclairage;0
-1;Packs Eclairage;Eclairage;0
-1;Pieds Portiques Structures;Eclairage;0
-1;Projecteurs Changeurs Couleurs;Eclairage;0
-1;Projecteurs de Scène;Eclairage;0
-1;Projecteurs IP Etanches;Eclairage;0
-1;Scanners et Rollers;Eclairage;0
-1;Stroboscopes;Eclairage;0
 1;Sono;;0
 1;Enceintes > Accessoires;Sono;0
 1;Micros > Accessoires;Sono;0
@@ -71,8 +48,31 @@
 1;Mixage studio;Home Studio;0
 1;Samplers studio;Home Studio;0
 1;Pack studio;Home Studio;0
+1;ACCUEIL;;0
+1;Eclairage;;0
+1;Blocs de puissance DMX;Eclairage;0
+1;Câbles et adptateurs DMX;Eclairage;0
+1;Commandes DMX;Eclairage;0
+1;Dispatchings;Eclairage;0
+1;Effets DJ à lampe;Eclairage;0
+1;Equipements Scéniques;Eclairage;0
+1;Flights et Bags de Transport;Eclairage;0
+1;Lampes;Eclairage;0
+1;Lasers;Eclairage;0
+1;LEDS;Eclairage;0
+1;Lumières Noires;Eclairage;0
+1;Lyres;Eclairage;0
+1;Machines à Fumée et Brouillard;Eclairage;0
+1;Machines à Neige et Bulles;Eclairage;0
+1;Modulateurs et Séquenceurs;Eclairage;0
+1;Packs Eclairage;Eclairage;0
+1;Pieds Portiques Structures;Eclairage;0
+1;Projecteurs Changeurs Couleurs;Eclairage;0
+1;Projecteurs de Scène;Eclairage;0
+1;Projecteurs IP Etanches;Eclairage;0
+1;Scanners et Rollers;Eclairage;0
+1;Stroboscopes;Eclairage;0
 1;TOP DEALS;;0
-1;Packs;;0
 1;Audiovisuel;;0
 1;Amplis Home Cinéma;Audiovisuel;0
 1;Amplis Public Address;Audiovisuel;0

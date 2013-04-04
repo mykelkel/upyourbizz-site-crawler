@@ -1,7 +1,7 @@
 /**
  * 
  */
-package fr.upyourbizz.aspiration.composants;
+package fr.upyourbizz.core;
 
 import java.io.FileWriter;
 import java.io.PrintWriter;
