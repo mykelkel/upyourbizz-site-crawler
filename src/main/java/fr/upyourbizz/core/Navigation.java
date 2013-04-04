@@ -3,8 +3,6 @@
  */
 package fr.upyourbizz.core;
 
-import java.io.FileWriter;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,7 +15,7 @@ import com.google.common.base.Objects.ToStringHelper;
 import fr.upyourbizz.utils.filescan.FileUtil;
 
 /**
- * @author Mikael THIBAULT
+ * @author Mikaël THIBAULT
  */
 public class Navigation {
 
@@ -64,37 +62,6 @@ public class Navigation {
             }
         }
         return urlsSousCategorie;
-    }
-
-    public void createCategoriesCsvFile() {
-        try {
-            PrintWriter out = new PrintWriter(new FileWriter("categories.csv"));
-
-            for (Entry<Category, List<Category>> entry : mapNavigation.entrySet()) {
-                // The characters <>;=#{} are forbidden
-                String parentCategory = removeForbiddenChar(entry.getKey().getName());
-                out.println("1;" + parentCategory + ";;0");
-                for (Category subCategory : entry.getValue()) {
-                    String category = removeForbiddenChar(subCategory.getName());
-                    out.println("1;" + category + ";" + parentCategory + ";0");
-                }
-            }
-            out.close();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private String removeForbiddenChar(String categoryName) {
-        categoryName.replace("<", "");
-        categoryName.replace(">", "");
-        categoryName.replace(";", "");
-        categoryName.replace("=", "");
-        categoryName.replace("#", "");
-        categoryName.replace("{", "");
-        categoryName.replace("}", "");
-        return categoryName;
     }
 
     @Override

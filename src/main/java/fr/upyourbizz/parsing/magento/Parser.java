@@ -16,6 +16,7 @@ import fr.upyourbizz.core.Article;
 import fr.upyourbizz.core.Category;
 import fr.upyourbizz.core.Contexte;
 import fr.upyourbizz.core.Navigation;
+import fr.upyourbizz.export.csv.ExportCategories;
 import fr.upyourbizz.export.csv.ExportProducts;
 import fr.upyourbizz.utils.Utils;
 
@@ -74,8 +75,7 @@ public class Parser {
         // navigation de l'écran d'accueil
         parseHomePageFromDisk(webSiteFolderName);
         extractSubCategoriesImg();
-        navigation.createCategoriesCsvFile();
-        navigation.extraireLienSousCategorie();
+        // navigation.extraireLienSousCategorie();
         Map<Category, List<Category>> mapTmp = new HashMap<Category, List<Category>>();
         mapTmp.putAll(navigation.getMapNavigation());
 
@@ -120,7 +120,6 @@ public class Parser {
                             Article article = ParserArticle.parserInformationArticle(documentHTML);
                             article.setCategorie(subCategory.calculateProductCategoriesCsv());
                             listeArticle.add(article);
-                            System.out.println(article.extractCsvInfos());
                         }
                     }
                     catch (IOException e) {
@@ -133,6 +132,7 @@ public class Parser {
         }
 
         try {
+            ExportCategories.createCategoriesCsvFile(navigation.getMapNavigation());
             ExportProducts.createProductsCsvFile(listeArticle);
         }
         catch (IOException e) {

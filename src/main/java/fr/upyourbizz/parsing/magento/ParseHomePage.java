@@ -18,7 +18,7 @@ import fr.upyourbizz.core.Navigation;
 import fr.upyourbizz.utils.filescan.FileUtil;
 
 /**
- * @author Mikael THIBAULT
+ * @author Mikaël THIBAULT
  */
 public class ParseHomePage {
 

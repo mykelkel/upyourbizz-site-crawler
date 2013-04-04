@@ -45,10 +45,6 @@ public class Article {
         this.listeUrlImagesCarousel = listeUrlImagesCarousel;
     }
 
-    public String genererClef() {
-        return categorie + Consts.SEPARATOR + nom;
-    }
-
     public String extractCsvInfos() {
         StringBuilder result = new StringBuilder();
         result.append(categorie + Consts.CSV_ITEM_SEPARATOR + nom + Consts.CSV_ITEM_SEPARATOR

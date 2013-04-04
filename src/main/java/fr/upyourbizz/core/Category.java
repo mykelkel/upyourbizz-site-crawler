@@ -35,9 +35,15 @@ public class Category {
 
     // ===== Constructeurs ====================================================
 
+    /**
+     * Constructor
+     * 
+     * @param name The name of the category
+     * @param url The url of the category
+     */
     public Category(String name, String url) {
         super();
-        this.name = name;
+        this.name = removeForbiddenChar(name);
         this.url = url;
         this.urlImage = Consts.EMPTY_STRING;
         this.description = Consts.EMPTY_STRING;
@@ -46,7 +52,7 @@ public class Category {
 
     public Category(String name, String url, Category parentCategory) {
         super();
-        this.name = name;
+        this.name = removeForbiddenChar(name);
         this.url = url;
         this.urlImage = Consts.EMPTY_STRING;
         this.description = Consts.EMPTY_STRING;
@@ -56,7 +62,7 @@ public class Category {
     public Category(String name, String description, Category parentCategory, String url,
             String urlImage) {
         super();
-        this.name = name;
+        this.name = removeForbiddenChar(name);
         this.description = description;
         this.parentCategory = null;
         this.url = url;
@@ -64,6 +70,17 @@ public class Category {
     }
 
     // ===== Méthodes =========================================================
+
+    private String removeForbiddenChar(String categoryName) {
+        categoryName = categoryName.replace("<", "");
+        categoryName = categoryName.replace(">", "");
+        categoryName = categoryName.replace(";", "");
+        categoryName = categoryName.replace("=", "");
+        categoryName = categoryName.replace("#", "");
+        categoryName = categoryName.replace("{", "");
+        categoryName = categoryName.replace("}", "");
+        return categoryName;
+    }
 
     public String calculateProductCategoriesCsv() {
         LinkedList<String> lList = new LinkedList<String>();
