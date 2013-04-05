@@ -31,9 +31,10 @@ public class ExportProducts {
      */
     public static void createProductsCsvFile(List<Article> productsList) throws IOException {
         try {
-            PrintWriter out = new PrintWriter(new FileWriter("products.csv"));
+            PrintWriter out = new PrintWriter(new FileWriter("csv/products.csv"));
             for (Article article : productsList) {
-                out.println("1;" + article.getCategorie() + Consts.CSV_ITEM_SEPARATOR
+                out.println("1;"
+                        // + article.getCategorie() + Consts.CSV_ITEM_SEPARATOR
                         + article.getNom() + Consts.CSV_ITEM_SEPARATOR + article.getPrix()
                         + Consts.CSV_ITEM_SEPARATOR + article.getMarque()
                         + Consts.CSV_ITEM_SEPARATOR + article.getUrlImgMarqueProduit()

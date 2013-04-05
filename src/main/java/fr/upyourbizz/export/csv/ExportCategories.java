@@ -35,7 +35,7 @@ public class ExportCategories {
      */
     public static void createCategoriesCsvFile(Map<Category, List<Category>> mapNavigation)
             throws IOException {
-        PrintWriter out = new PrintWriter(new FileWriter("categories.csv"));
+        PrintWriter out = new PrintWriter(new FileWriter("csv/categories.csv"));
 
         for (Entry<Category, List<Category>> entry : mapNavigation.entrySet()) {
             // The characters <>;=#{} are forbidden

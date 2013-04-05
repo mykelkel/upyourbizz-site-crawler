@@ -21,7 +21,7 @@ import fr.upyourbizz.export.csv.ExportProducts;
 import fr.upyourbizz.utils.Utils;
 
 /**
- * @author Mikael THIBAULT
+ * @author Mikaël THIBAULT
  */
 public class Parser {
 
