@@ -12,12 +12,11 @@ import org.jsoup.nodes.Document;
 
 import fr.upyourbizz.core.Contexte;
 import fr.upyourbizz.utils.constantes.Consts;
-import fr.upyourbizz.utils.filescan.FileUtil;
 
 /**
  * Utils
  */
-public class Utils {
+public class Reader {
 
     // ===== Attributs statiques ==============================================
 
@@ -46,7 +45,7 @@ public class Utils {
         boolean saveFile = contexte.isSaveFile();
         Document document = Jsoup.parse(Consts.JSOUP_PARSER_DEFAULT_PARSING_STRING);
         if (fromDisk) {
-            String filePath = FileUtil.convertUrlToRelativePath(filePathOrUrl);
+            String filePath = convertUrlToRelativePath(filePathOrUrl);
             try {
                 File file = new File(filePath);
                 document = Jsoup.parse(file, "UTF-8");
@@ -64,7 +63,7 @@ public class Utils {
         }
         else {
             if (saveFile) {
-                File file = FileUtil.saveFileToDisk(filePathOrUrl);
+                File file = FileDownloader.saveFileToDisk(filePathOrUrl);
                 document = Jsoup.parse(file, "UTF-8");
             }
             else {
@@ -78,10 +77,10 @@ public class Utils {
         String message = e.getMessage();
         String[] messageSplit = message.split(" ");
         String fileNotFound = messageSplit[0];
-        System.err.println("Fichier " + messageSplit[0] + " non trouvé");
+        System.err.println("File " + messageSplit[0] + " not found");
         try {
-            System.out.println("Re-téléchargement du fichier " + fileNotFound);
-            FileUtil.saveFileToDisk("http://" + fileNotFound);
+            System.out.println("Redownloading: " + fileNotFound);
+            FileDownloader.saveFileToDisk("http://" + fileNotFound);
         }
         catch (MalformedURLException e1) {
             e1.printStackTrace();
@@ -91,8 +90,23 @@ public class Utils {
         }
     }
 
+    /**
+     * Remove http:// from an url
+     * 
+     * @param url The url
+     * @return the url without http://
+     */
+    public static String convertUrlToRelativePath(String url) {
+        return url.replace("http://", "");
+    }
+
     // ===== Accesseurs =======================================================
 
+    /**
+     * Affecte contexte
+     * 
+     * @param contexte contexte à affecter
+     */
     public void setContexte(Contexte contexte) {
         this.contexte = contexte;
     }

@@ -15,7 +15,7 @@ import org.jsoup.select.Elements;
 
 import fr.upyourbizz.core.Category;
 import fr.upyourbizz.core.Navigation;
-import fr.upyourbizz.utils.filescan.FileUtil;
+import fr.upyourbizz.utils.Reader;
 
 /**
  * @author Mikaël THIBAULT
@@ -39,7 +39,7 @@ public class ParseHomePage {
             throws IOException {
         if (saveFilesOnDisk) {
             URL url = new URL(urlHomePage);
-            File destination = new File(FileUtil.convertUrlToRelativePath(urlHomePage)
+            File destination = new File(Reader.convertUrlToRelativePath(urlHomePage)
                     + "/accueil.html");
 
             FileUtils.copyURLToFile(url, destination);
@@ -54,14 +54,12 @@ public class ParseHomePage {
     /**
      * Parse home page, seeking navigation informations
      * 
-     * @param urlHomePage
-     * @param saveFilesOnDisk
+     * @param homePageFile
      * @return
      * @throws IOException
      */
-    public static Navigation parseHomePageFromDisk(String webSiteFolderName) throws IOException {
-        File webSiteHomePageOnDisk = new File(webSiteFolderName + "/accueil.html");
-        Document homePage = Jsoup.parse(webSiteHomePageOnDisk, "UTF-8");
+    public static Navigation parseHomePageFromDisk(File homePageFile) throws IOException {
+        Document homePage = Jsoup.parse(homePageFile, "UTF-8");
         return parserLiensAccueil(homePage);
     }
 

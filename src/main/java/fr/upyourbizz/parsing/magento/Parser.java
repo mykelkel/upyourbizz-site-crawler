@@ -3,7 +3,9 @@
  */
 package fr.upyourbizz.parsing.magento;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,7 +20,8 @@ import fr.upyourbizz.core.Contexte;
 import fr.upyourbizz.core.Navigation;
 import fr.upyourbizz.export.csv.ExportCategories;
 import fr.upyourbizz.export.csv.ExportProducts;
-import fr.upyourbizz.utils.Utils;
+import fr.upyourbizz.utils.FileDownloader;
+import fr.upyourbizz.utils.Reader;
 
 /**
  * @author Mikaël THIBAULT
@@ -29,51 +32,20 @@ public class Parser {
 
     private Navigation navigation;
 
-    private Utils utils;
+    private Reader reader;
 
     /**
-     * @return
+     * Parse the website whose url is provided in the property file
+     * 
+     * @throws MalformedURLException
+     * @throws IOException
      */
-    public List<String> extractProductUrlFromInternet() {
-        String urlAccueilSite = contexte.getHomePageUrl();
-        boolean enregistrerFichier = contexte.isSaveFile();
-
+    public void parseWebSite() throws MalformedURLException, IOException {
         // La première étape consite à extraire les liens de la barre de
         // navigation de l'écran d'accueil
-        Navigation barreNavigation = parsingAccueil(urlAccueilSite, enregistrerFichier);
-
-        System.out.println(barreNavigation.toString());
-
-        List<String> urlsSousCategorie = barreNavigation.extraireUrlSousCategorie();
-        int compteurSousCategorieParcourues = 0;
-        List<String> urlsArticlesTrouves = new ArrayList<String>();
-
-        // while (!urlsSousCategorie.isEmpty()) {
-        // List<String> urlSousCategoriesSup = new ArrayList<String>();
-        // for (String urlSousCategorie : urlSousCategoriesSup) {
-        // if (parcoursAutorise(compteurSousCategorieParcourues)) {
-        // ResultatParsingSousCategorie resultatParsingSousCategorie =
-        // parsingSousCategorie(
-        // urlSousCategorie, enregistrerFichier);
-        // urlsArticlesTrouves.addAll(resultatParsingSousCategorie.getListeUrlArticlesTrouves());
-        // urlSousCategoriesSup.addAll(resultatParsingSousCategorie.getListeAutresSousCategories());
-        // }
-        // else {
-        // break;
-        // }
-        // }
-        // urlsSousCategorie = urlSousCategoriesSup;
-        // }
-        for (String urlArticlesTrouves : urlsArticlesTrouves) {
-            System.out.println(urlArticlesTrouves);
-        }
-        return null;
-    }
-
-    public List<String> extractProductUrlFromDisk(String webSiteFolderName) {
-        // La première étape consite à extraire les liens de la barre de
-        // navigation de l'écran d'accueil
-        parseHomePageFromDisk(webSiteFolderName);
+        File homePage = saveHomePageOnDisk(contexte.getWebSiteUrl(),
+                contexte.getWebSiteParseResultFolder());
+        parseHomePageFromDisk(homePage);
         extractSubCategoriesImg();
         // navigation.extraireLienSousCategorie();
         Map<Category, List<Category>> mapTmp = new HashMap<Category, List<Category>>();
@@ -115,7 +87,7 @@ public class Parser {
                 for (String url : listeUrl) {
                     Document documentHTML;
                     try {
-                        documentHTML = utils.readFileOrUrl(url);
+                        documentHTML = reader.readFileOrUrl(url);
                         if (documentHTML != null) {
                             Article article = ParserArticle.parserInformationArticle(documentHTML);
                             article.setCategorie(subCategory.calculateProductCategoriesCsv());
@@ -138,37 +110,6 @@ public class Parser {
         catch (IOException e) {
             e.printStackTrace();
         }
-        // System.out.println(barreNavigation.toString());
-        // List<String> urlsSousCategorie = barreNavigation
-        // .extraireLienSousCategorie();
-        // int compteurSousCategorieParcourues = 0;
-        // List<String> urlsArticlesTrouves = new ArrayList<String>();
-        //
-        // while (!urlsSousCategorie.isEmpty()) {
-        // List<String> urlSousCategoriesSup = new ArrayList<String>();
-        // for (String urlSousCategorie : urlsSousCategorie) {
-        // if (parcoursAutorise(compteurSousCategorieParcourues)) {
-        // ResultatParsingSousCategorie resultatParsingSousCategorie =
-        // parseSubCategoryFromDisk(
-        // urlSousCategorie, true);
-        // urlsArticlesTrouves.addAll(resultatParsingSousCategorie
-        // .getListeUrlArticlesTrouves());
-        // urlSousCategoriesSup.addAll(resultatParsingSousCategorie
-        // .getListeAutresSousCategories());
-        // } else {
-        // break;
-        // }
-        // }
-        // urlsSousCategorie = new ArrayList<String>();
-        // for (String urlSousCAtegorieSup : urlSousCategoriesSup) {
-        // urlsSousCategorie
-        // .add(FileUtil.convertUrlToRelativePath(urlSousCAtegorieSup));
-        // }
-        // }
-        // for (String urlArticlesTrouves : urlsArticlesTrouves) {
-        // System.out.println(urlArticlesTrouves);
-        // }
-        return null;
     }
 
     private void extractSubCategoriesImg() {
@@ -176,27 +117,21 @@ public class Parser {
 
     }
 
-    private boolean parcoursAutorise(int compteurSousCategorieParcourues) {
-        return (contexte.getNbSousCategorieAParcourir() < 0 || compteurSousCategorieParcourues < contexte.getNbSousCategorieAParcourir());
+    private File saveHomePageOnDisk(String url, String destinationFolder)
+            throws MalformedURLException, IOException {
+        if (url != null && !url.isEmpty() && !destinationFolder.isEmpty()) {
+            String destinationPath = destinationFolder + "/" + "accueil.html";
+            return FileDownloader.saveFileToDisk(url, destinationPath);
+        }
+        else {
+            throw new MalformedURLException("Problem with the url provided in the property file");
+        }
     }
 
-    private Navigation parsingAccueil(String urlAccueilSite, boolean enregistrerFichier) {
-        Navigation navigation = new Navigation();
-        try {
-            navigation = ParseHomePage.parseHomePageFromInternet(urlAccueilSite, enregistrerFichier);
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-        return navigation;
-    }
-
-    private void parseHomePageFromDisk(String urlAccueilSite) {
+    private void parseHomePageFromDisk(File homePage) {
 
         try {
-            // TODO ne remonter qu'un mapper
-            Navigation navigationTmp = new Navigation();
-            navigationTmp = ParseHomePage.parseHomePageFromDisk(urlAccueilSite);
+            Navigation navigationTmp = ParseHomePage.parseHomePageFromDisk(homePage);
             navigation.setMapNavigation(navigationTmp.getMapNavigation());
         }
         catch (IOException e) {
@@ -208,13 +143,13 @@ public class Parser {
             boolean downloadFileIfMissing) {
         ResultatParsingSousCategorie resultatParsingSousCategorie = new ResultatParsingSousCategorie();
         try {
-            Document documentHTML = utils.readFileOrUrl(subCategory.getUrl());
+            Document documentHTML = reader.readFileOrUrl(subCategory.getUrl());
             resultatParsingSousCategorie = ParserSousCategorie.parserSousCategorie(subCategory,
                     documentHTML, true);
             List<String> urlsSousPage = resultatParsingSousCategorie.getListeAutrePagesAParserMemeCategorie();
             if (!urlsSousPage.isEmpty()) {
                 for (String urlSousPage : urlsSousPage) {
-                    documentHTML = utils.readFileOrUrl(urlSousPage);
+                    documentHTML = reader.readFileOrUrl(urlSousPage);
                     ResultatParsingSousCategorie resultatParsingSousCategoriePageSupplementaire = ParserSousCategorie.parserSousCategorie(
                             null, documentHTML, false);
                     resultatParsingSousCategorie.getListeUrlArticlesTrouves().addAll(
@@ -231,16 +166,31 @@ public class Parser {
 
     // ==== Accesseurs =================================
 
+    /**
+     * Affecte contexte
+     * 
+     * @param contexte contexte à affecter
+     */
     public void setContexte(Contexte contexte) {
         this.contexte = contexte;
     }
 
+    /**
+     * Affecte navigation
+     * 
+     * @param navigation navigation à affecter
+     */
     public void setNavigation(Navigation navigation) {
         this.navigation = navigation;
     }
 
-    public void setUtils(Utils utils) {
-        this.utils = utils;
+    /**
+     * Affecte reader
+     * 
+     * @param reader reader à affecter
+     */
+    public void setReader(Reader reader) {
+        this.reader = reader;
     }
 
 }

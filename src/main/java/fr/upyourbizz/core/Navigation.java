@@ -12,7 +12,7 @@ import java.util.Map.Entry;
 import com.google.common.base.Objects;
 import com.google.common.base.Objects.ToStringHelper;
 
-import fr.upyourbizz.utils.filescan.FileUtil;
+import fr.upyourbizz.utils.Reader;
 
 /**
  * @author Mikaël THIBAULT
@@ -58,7 +58,7 @@ public class Navigation {
         List<String> urlsSousCategorie = new ArrayList<String>();
         for (Entry<Category, List<Category>> entry : mapNavigation.entrySet()) {
             for (Category subCategory : entry.getValue()) {
-                urlsSousCategorie.add(FileUtil.convertUrlToRelativePath(subCategory.getUrl()));
+                urlsSousCategorie.add(Reader.convertUrlToRelativePath(subCategory.getUrl()));
             }
         }
         return urlsSousCategorie;

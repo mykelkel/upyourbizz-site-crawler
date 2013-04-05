@@ -6,15 +6,13 @@ package fr.upyourbizz.core;
 import fr.upyourbizz.utils.constantes.Consts;
 
 /**
- * @author Mikael THIBAULT
+ * @author Mikaël THIBAULT
  */
 public class Contexte {
 
-    private String homePagePath = Consts.EMPTY_STRING;
+    private String webSiteParseResultFolder = Consts.EMPTY_STRING;
 
-    private String homePageUrl = Consts.EMPTY_STRING;
-
-    private int nbSousCategorieAParcourir = -1;
+    private String webSiteUrl = Consts.EMPTY_STRING;
 
     /**
      * if true, the website will be read from the disk, if false it will be read
@@ -30,50 +28,92 @@ public class Contexte {
 
     private boolean downloadFileIfMissing = true;
 
-    public String getHomePagePath() {
-        return homePagePath;
+    /**
+     * Retourne webSiteParseResultFolder
+     * 
+     * @return webSiteParseResultFolder
+     */
+    public String getWebSiteParseResultFolder() {
+        return webSiteParseResultFolder;
     }
 
-    public void setHomePagePath(String homePagePath) {
-        this.homePagePath = homePagePath;
+    /**
+     * Affecte webSiteParseResultFolder
+     * 
+     * @param webSiteParseResultFolder webSiteParseResultFolder à affecter
+     */
+    public void setWebSiteParseResultFolder(String webSiteParseResultFolder) {
+        this.webSiteParseResultFolder = webSiteParseResultFolder;
     }
 
-    public String getHomePageUrl() {
-        return homePageUrl;
+    /**
+     * Retourne webSiteUrl
+     * 
+     * @return webSiteUrl
+     */
+    public String getWebSiteUrl() {
+        return webSiteUrl;
     }
 
-    public void setHomePageUrl(String homePageUrl) {
-        this.homePageUrl = homePageUrl;
+    /**
+     * Affecte webSiteUrl
+     * 
+     * @param webSiteUrl webSiteUrl à affecter
+     */
+    public void setWebSiteUrl(String webSiteUrl) {
+        this.webSiteUrl = webSiteUrl;
     }
 
-    public int getNbSousCategorieAParcourir() {
-        return nbSousCategorieAParcourir;
-    }
-
-    public void setNbSousCategorieAParcourir(int nbSousCategorieAParcourir) {
-        this.nbSousCategorieAParcourir = nbSousCategorieAParcourir;
-    }
-
+    /**
+     * Retourne fromDisk
+     * 
+     * @return fromDisk
+     */
     public boolean isFromDisk() {
         return fromDisk;
     }
 
+    /**
+     * Affecte fromDisk
+     * 
+     * @param fromDisk fromDisk à affecter
+     */
     public void setFromDisk(boolean fromDisk) {
         this.fromDisk = fromDisk;
     }
 
+    /**
+     * Retourne saveFile
+     * 
+     * @return saveFile
+     */
     public boolean isSaveFile() {
         return saveFile;
     }
 
+    /**
+     * Affecte saveFile
+     * 
+     * @param saveFile saveFile à affecter
+     */
     public void setSaveFile(boolean saveFile) {
         this.saveFile = saveFile;
     }
 
+    /**
+     * Retourne downloadFileIfMissing
+     * 
+     * @return downloadFileIfMissing
+     */
     public boolean isDownloadFileIfMissing() {
         return downloadFileIfMissing;
     }
 
+    /**
+     * Affecte downloadFileIfMissing
+     * 
+     * @param downloadFileIfMissing downloadFileIfMissing à affecter
+     */
     public void setDownloadFileIfMissing(boolean downloadFileIfMissing) {
         this.downloadFileIfMissing = downloadFileIfMissing;
     }
