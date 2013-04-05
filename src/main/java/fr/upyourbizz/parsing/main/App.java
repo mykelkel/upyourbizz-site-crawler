@@ -1,14 +1,10 @@
 package fr.upyourbizz.parsing.main;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import fr.upyourbizz.core.Contexte;
 import fr.upyourbizz.parsing.magento.Parser;
-import fr.upyourbizz.utils.ImageDownloader;
 
 /**
  * Hello world!
@@ -34,11 +30,11 @@ public class App {
 
         // retrieve configured instance
         Parser parser = context.getBean("parser", Parser.class);
-        // parser.extractProductUrlFromDisk("www.terredeson.com");
+        parser.extractProductUrlFromDisk("www.terredeson.com");
 
-        List<String> listeUrl = new ArrayList<String>();
-        listeUrl.add("http://www.terredeson.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/r/g/rgbamplifierdune_3_1_3_1_9.jpg");
-        ImageDownloader.downloadImg("imgs/test", listeUrl.get(0));
+        // List<String> listeUrl = new ArrayList<String>();
+        // listeUrl.add("http://www.terredeson.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/r/g/rgbamplifierdune_3_1_3_1_9.jpg");
+        // ImageDownloader.downloadImg("imgs/test", listeUrl.get(0));
 
         // Navigation navigation = parsingAccueil();
         // File f = new File("www.terredeson.com/eclairage/commandes-dmx.html");
