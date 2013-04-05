@@ -38,8 +38,10 @@ public class ParserArticle {
                 if (productShop != null) {
                     nom = productShop.text();
                     Element marqueProduitElem = productShop.select("img[src]").first();
-                    urlImgMarqueProduit = marqueProduitElem.attributes().get("src").toLowerCase();
-                    marque = marqueProduitElem.attributes().get("alt").toLowerCase();
+                    if (marqueProduitElem != null) {
+                        urlImgMarqueProduit = marqueProduitElem.attributes().get("src").toLowerCase();
+                        marque = marqueProduitElem.attributes().get("alt").toLowerCase();
+                    }
                 }
                 Element price = productEssential.select("span.price").first();
                 if (price != null) {

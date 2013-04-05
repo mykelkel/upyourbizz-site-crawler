@@ -33,12 +33,19 @@ public class ExportProducts {
         try {
             PrintWriter out = new PrintWriter(new FileWriter("csv/products.csv"));
             for (Article article : productsList) {
-                out.println("1;"
+                out.print("1;"
                         // + article.getCategorie() + Consts.CSV_ITEM_SEPARATOR
                         + article.getNom() + Consts.CSV_ITEM_SEPARATOR + article.getPrix()
                         + Consts.CSV_ITEM_SEPARATOR + article.getMarque()
                         + Consts.CSV_ITEM_SEPARATOR + article.getUrlImgMarqueProduit()
-                        + Consts.CSV_ITEM_SEPARATOR + article.getDescription());
+                        + Consts.CSV_ITEM_SEPARATOR);
+                for (int i = 0; i < article.getListeUrlImages().size(); i++) {
+                    if (i > 0) {
+                        out.print(",");
+                    }
+                    out.print(article.getListeUrlImages().get(i));
+                }
+                out.println(Consts.CSV_ITEM_SEPARATOR + article.getDescription());
             }
             out.close();
         }

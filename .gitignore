@@ -1,3 +1,5 @@
 target
 www.terredeson.com
 .DS_Store
+imgs
+*.csv
