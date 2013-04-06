@@ -3,3 +3,7 @@ www.terredeson.com
 .DS_Store
 imgs
 *.csv
+
+conf/logback/logback.out.xml
+
+log/parsing.log

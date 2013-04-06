@@ -54,10 +54,12 @@ public class ParserArticle {
                         listeImages.add(imgBig.attributes().get("src").toLowerCase());
                     }
                     Element carouselMiniature = productImgBox.select("#carousel-maniatures").first();
-                    Elements images = carouselMiniature.getElementsByTag("img");
-                    if (images != null) {
-                        for (Element img : images) {
-                            listeImagesCarousel.add(img.attributes().get("src").toLowerCase());
+                    if (carouselMiniature != null) {
+                        Elements images = carouselMiniature.getElementsByTag("img");
+                        if (images != null) {
+                            for (Element img : images) {
+                                listeImagesCarousel.add(img.attributes().get("src").toLowerCase());
+                            }
                         }
                     }
                 }
