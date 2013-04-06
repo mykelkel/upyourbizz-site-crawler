@@ -3,6 +3,8 @@ package fr.upyourbizz.parsing.main;
 import java.io.IOException;
 import java.net.MalformedURLException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -14,18 +16,25 @@ import fr.upyourbizz.parsing.magento.Parser;
  */
 public class App {
 
+    // ===== Attributs statiques ==============================================
+
+    private static Logger logger = LoggerFactory.getLogger(App.class);
+
+    // ===== Méthodes statiques ===============================================
+
     /**
      * Main function
      * 
      * @param args
      */
     public static void main(String[] args) {
+        logger.info("© 2013, Upyourbizz - All right reserved");
         try {
             String executionPath = System.getProperty("user.dir");
-            System.out.println("Executing at =>" + executionPath.replace("\\", "/"));
+            logger.info("Executing at =>" + executionPath.replace("\\", "/"));
         }
         catch (Exception e) {
-            System.out.println("Exception caught =" + e.getMessage());
+            logger.error("Exception caught =" + e.getMessage());
         }
 
         // create and configure beans

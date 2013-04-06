@@ -1,5 +1,5 @@
-/**
- * 
+/*
+ * © 2013, Upyourbizz - Tous droits réservés
  */
 package fr.upyourbizz.parsing.magento;
 
@@ -13,6 +13,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.jsoup.nodes.Document;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import fr.upyourbizz.core.Article;
 import fr.upyourbizz.core.Category;
@@ -28,11 +30,23 @@ import fr.upyourbizz.utils.Reader;
  */
 public class Parser {
 
+    // ===== Attributs statiques ==============================================
+
+    private static Logger logger = LoggerFactory.getLogger(Parser.class);
+
+    // ===== Méthodes statiques ===============================================
+
+    // ===== Attributs ========================================================
+
     private Contexte contexte;
 
     private Navigation navigation;
 
     private Reader reader;
+
+    // ===== Constructeurs ====================================================
+
+    // ===== Méthodes =========================================================
 
     /**
      * Parse the website whose url is provided in the property file
@@ -41,6 +55,7 @@ public class Parser {
      * @throws IOException
      */
     public void parseWebSite() throws MalformedURLException, IOException {
+        logger.debug("parseWebSite");
         // La première étape consite à extraire les liens de la barre de
         // navigation de l'écran d'accueil
         File homePage = saveHomePageOnDisk(contexte.getWebSiteUrl(),
@@ -81,7 +96,7 @@ public class Parser {
 
         List<Article> listeArticle = new ArrayList<Article>();
         for (Entry<Category, List<Category>> category : navigation.getMapNavigation().entrySet()) {
-            System.out.println("Categorie = " + category.getKey().getName());
+            // System.out.println("Categorie = " + category.getKey().getName());
             for (Category subCategory : category.getValue()) {
                 List<String> listeUrl = subCategory.getUrlRelatedProducts();
                 for (String url : listeUrl) {
@@ -98,9 +113,7 @@ public class Parser {
                         e.printStackTrace();
                     }
                 }
-                break;
             }
-            break;
         }
 
         try {

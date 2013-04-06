@@ -1,5 +1,5 @@
-/**
- * 
+/*
+ * © 2013, Upyourbizz - Tous droits réservés
  */
 package fr.upyourbizz.parsing.magento;
 
@@ -12,6 +12,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import fr.upyourbizz.core.Category;
 import fr.upyourbizz.core.Navigation;
@@ -21,6 +23,12 @@ import fr.upyourbizz.utils.Reader;
  * @author Mikaël THIBAULT
  */
 public class ParseHomePage {
+
+    // ===== Attributs statiques ==============================================
+
+    private static Logger logger = LoggerFactory.getLogger(ParseHomePage.class);
+
+    // ===== Méthodes statiques ===============================================
 
     public static Navigation parserLiensAccueil(File fichierAccueil) throws IOException {
         Document accueil = Jsoup.parse(fichierAccueil, "UTF-8");
@@ -107,5 +115,15 @@ public class ParseHomePage {
             }
         }
     }
+
+    // ===== Attributs ========================================================
+
+    // ===== Constructeurs ====================================================
+
+    // ===== Méthodes =========================================================
+
+    // ===== Accesseurs =======================================================
+
+    // ===== Classes imbriques ===============================================
 
 }

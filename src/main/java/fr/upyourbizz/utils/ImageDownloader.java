@@ -10,6 +10,9 @@ import java.net.URL;
 
 import javax.imageio.ImageIO;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * ImageDownloader
  */
@@ -18,6 +21,8 @@ public class ImageDownloader {
     // ===== Attributs statiques ==============================================
 
     // ===== Méthodes statiques ===============================================
+
+    private static Logger logger = LoggerFactory.getLogger(ImageDownloader.class);
 
     // ===== Attributs ========================================================
 
@@ -33,11 +38,10 @@ public class ImageDownloader {
             int dotPosition = nomFichier.lastIndexOf('.');
             int slashPosition = nomFichier.lastIndexOf('/');
             String fileName = nomFichier.substring(slashPosition + 1, dotPosition);
-            System.out.println(nomFichier);
             File directory = new File(relativeDirectoryPath);
             if (!directory.exists()) {
                 if (!directory.mkdirs()) {
-                    System.err.println("Failed to create directory!");
+                    logger.error("Failed to create directory!");
                 }
             }
             ImageIO.write(image, "jpg", new File(relativeDirectoryPath + "/" + fileName + ".jpg"));

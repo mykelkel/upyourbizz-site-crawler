@@ -9,12 +9,14 @@ import java.net.MalformedURLException;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import fr.upyourbizz.core.Contexte;
 import fr.upyourbizz.utils.constantes.Consts;
 
 /**
- * Utils
+ * Reader
  */
 public class Reader {
 
@@ -23,6 +25,8 @@ public class Reader {
     private Contexte contexte;
 
     // ===== Méthodes statiques ===============================================
+
+    private static Logger logger = LoggerFactory.getLogger(Reader.class);
 
     // ===== Attributs ========================================================
 
@@ -77,9 +81,9 @@ public class Reader {
         String message = e.getMessage();
         String[] messageSplit = message.split(" ");
         String fileNotFound = messageSplit[0];
-        System.err.println("File " + messageSplit[0] + " not found");
+        // System.err.println("File " + messageSplit[0] + " not found");
         try {
-            System.out.println("Redownloading: " + fileNotFound);
+            logger.info("Downloading: " + fileNotFound);
             FileDownloader.saveFileToDisk("http://" + fileNotFound);
         }
         catch (MalformedURLException e1) {
@@ -111,5 +115,5 @@ public class Reader {
         this.contexte = contexte;
     }
 
-    // ===== Classes imbriquées ===============================================
+    // ===== Classes imbriques ===============================================
 }
