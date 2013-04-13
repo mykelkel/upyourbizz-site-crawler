@@ -12,6 +12,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import fr.upyourbizz.core.Article;
 import fr.upyourbizz.utils.constantes.Consts;
@@ -20,6 +22,12 @@ import fr.upyourbizz.utils.constantes.Consts;
  * @author Mikaël THIBAULT
  */
 public class ParserArticle {
+
+    // ===== Attributs statiques ==============================================
+
+    private static Logger logger = LoggerFactory.getLogger(Parser.class);
+
+    // ===== Méthodes statiques ===============================================
 
     public static Article parserInformationArticle(Document document) throws IOException {
         String nom = Consts.EMPTY_STRING;
@@ -36,11 +44,18 @@ public class ParserArticle {
             if (productEssential != null) {
                 Element productShop = productEssential.select("div.product-shop").first();
                 if (productShop != null) {
-                    nom = productShop.text();
+                    Element nomElem = productShop.select("h2").first();
+                    if (nomElem != null) {
+                        nom = nomElem.text();
+                    }
+                    Element marqueElem = productShop.select("h1").first();
+                    if (marqueElem != null) {
+                        marque = marqueElem.text();
+                    }
+
                     Element marqueProduitElem = productShop.select("img[src]").first();
                     if (marqueProduitElem != null) {
                         urlImgMarqueProduit = marqueProduitElem.attributes().get("src").toLowerCase();
-                        marque = marqueProduitElem.attributes().get("alt").toLowerCase();
                     }
                 }
                 Element price = productEssential.select("span.price").first();
@@ -49,9 +64,11 @@ public class ParserArticle {
                 }
                 Element productImgBox = productEssential.select("div.product-img-box").first();
                 if (productImgBox != null) {
-                    Element imgBig = productEssential.select("img.big-media").first();
-                    if (imgBig != null) {
-                        listeImages.add(imgBig.attributes().get("src").toLowerCase());
+                    Elements imgsBig = productImgBox.select("img.big-media");
+                    if (imgsBig != null) {
+                        for (Element imgBig : imgsBig) {
+                            listeImages.add(imgBig.attributes().get("src").toLowerCase());
+                        }
                     }
                     Element carouselMiniature = productImgBox.select("#carousel-maniatures").first();
                     if (carouselMiniature != null) {
@@ -60,13 +77,16 @@ public class ParserArticle {
                             for (Element img : images) {
                                 listeImagesCarousel.add(img.attributes().get("src").toLowerCase());
                             }
+                            if (listeImagesCarousel.size() > 1) {
+                                logger.debug("Carousel");
+                            }
                         }
                     }
                 }
             }
             Element divDescriptionProduit = productView.select("div.block-content").first();
             if (divDescriptionProduit != null) {
-                description = divDescriptionProduit.text();
+                description = divDescriptionProduit.html();
             }
         }
         return new Article(categorie, nom, prix, description, marque, urlImgMarqueProduit,

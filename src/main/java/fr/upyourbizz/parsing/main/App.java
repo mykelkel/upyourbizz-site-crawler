@@ -56,6 +56,12 @@ public class App {
         catch (IOException e) {
             e.printStackTrace();
         }
+        // try {
+        // CsvFileSplitter.splitCsvFile("csv/products.csv");
+        // }
+        // catch (IOException e) {
+        // e.printStackTrace();
+        // }
 
         ((ClassPathXmlApplicationContext) context).close();
         return;
