@@ -4,9 +4,8 @@
 package fr.upyourbizz.core;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 
 import com.google.common.base.Objects;
@@ -23,7 +22,8 @@ public class Navigation {
      * Map contenant en clef le nom d'une catégorie et en valeur, l'ensemble des
      * urls de ses sous catégories
      */
-    private Map<Category, List<Category>> mapNavigation = new HashMap<Category, List<Category>>();
+    private LinkedHashMap<Category, List<Category>> mapNavigation = new LinkedHashMap<Category, List<Category>>(
+            100, 0.75F, false);
 
     public Category ajouterNouvelleCategorie(String categorieName, String categorieUrl) {
         Category nouvelleCategory = new Category(categorieName, categorieUrl);
@@ -79,11 +79,11 @@ public class Navigation {
 
     // ========= Accesseurs ============================
 
-    public Map<Category, List<Category>> getMapNavigation() {
+    public LinkedHashMap<Category, List<Category>> getMapNavigation() {
         return mapNavigation;
     }
 
-    public void setMapNavigation(Map<Category, List<Category>> mapNavigation) {
+    public void setMapNavigation(LinkedHashMap<Category, List<Category>> mapNavigation) {
         this.mapNavigation = mapNavigation;
     }
 

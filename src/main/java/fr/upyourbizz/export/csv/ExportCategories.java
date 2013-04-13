@@ -40,7 +40,9 @@ public class ExportCategories {
         for (Entry<Category, List<Category>> entry : mapNavigation.entrySet()) {
             // The characters <>;=#{} are forbidden
             String parentCategory = entry.getKey().getName();
-            out.println("1;" + parentCategory + ";;0");
+            if (entry.getKey().getParentCategory() == null) {
+                out.println("1;" + parentCategory + ";;1");
+            }
             for (Category subCategory : entry.getValue()) {
                 String category = subCategory.getName();
                 out.println("1;" + category + ";" + parentCategory + ";0");
@@ -48,7 +50,6 @@ public class ExportCategories {
         }
         out.close();
     }
-
     // ===== Attributs ========================================================
 
     // ===== Constructeurs ====================================================

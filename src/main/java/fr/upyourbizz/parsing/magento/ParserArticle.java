@@ -89,8 +89,14 @@ public class ParserArticle {
                 description = divDescriptionProduit.html();
             }
         }
-        return new Article(categorie, nom, prix, description, marque, urlImgMarqueProduit,
-                listeImages, listeImagesCarousel);
+        return new Article(categorie, nom, prix, replaceDoubleQuote(description), marque,
+                urlImgMarqueProduit, listeImages, listeImagesCarousel);
+    }
+
+    private static String replaceDoubleQuote(String string) {
+
+        string = string.replaceAll("[\n\r]", "");
+        return string.replace("\"", "'");
     }
 
     public static boolean estFicheProduit(String lienFichier) throws IOException {

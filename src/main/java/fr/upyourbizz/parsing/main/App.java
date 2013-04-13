@@ -10,6 +10,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import fr.upyourbizz.core.Contexte;
 import fr.upyourbizz.parsing.magento.Parser;
+import fr.upyourbizz.utils.CsvFileSplitter;
 
 /**
  * Upyourbizz site crawler!!
@@ -56,12 +57,12 @@ public class App {
         catch (IOException e) {
             e.printStackTrace();
         }
-        // try {
-        // CsvFileSplitter.splitCsvFile("csv/products.csv");
-        // }
-        // catch (IOException e) {
-        // e.printStackTrace();
-        // }
+        try {
+            CsvFileSplitter.splitCsvFile("csv/products.csv");
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
 
         ((ClassPathXmlApplicationContext) context).close();
         return;
