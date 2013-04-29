@@ -58,9 +58,12 @@ public class ParserArticle {
                         urlImgMarqueProduit = marqueProduitElem.attributes().get("src").toLowerCase();
                     }
                 }
-                Element price = productEssential.select("span.price").first();
-                if (price != null) {
-                    prix = price.text();
+                Elements price = productEssential.select("span.price");
+                if (price != null && price.size() > 0) {
+                    prix = replaceSpace(price.get(price.size() - 1).ownText());
+                    if (price.size() > 1) {
+                        logger.debug("Plusieurs prix présents");
+                    }
                 }
                 Element productImgBox = productEssential.select("div.product-img-box").first();
                 if (productImgBox != null) {
@@ -76,9 +79,6 @@ public class ParserArticle {
                         if (images != null) {
                             for (Element img : images) {
                                 listeImagesCarousel.add(img.attributes().get("src").toLowerCase());
-                            }
-                            if (listeImagesCarousel.size() > 1) {
-                                logger.debug("Carousel");
                             }
                         }
                     }
@@ -97,6 +97,14 @@ public class ParserArticle {
 
         string = string.replaceAll("[\n\r]", "");
         return string.replace("\"", "'");
+    }
+
+    private static String replaceSpace(String string) {
+        // Search and replace all non ASCII letters:
+        string = string.replaceAll("[^\\x00-\\x7F]", "");
+        // string = string.replaceAll("\\s|€", "");
+        // return string.replaceAll(",", ".");
+        return string;
     }
 
     public static boolean estFicheProduit(String lienFichier) throws IOException {

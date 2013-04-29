@@ -30,7 +30,8 @@ public class CsvFileSplitter {
 
     // ===== Méthodes =========================================================
 
-    public static void splitCsvFile(String filePath) throws IOException {
+    public static void splitProductsCsvFile(String filePath, int nbProductByFile)
+            throws IOException {
         BufferedReader br = new BufferedReader(new FileReader(filePath));
         int nbCsvFile = 1;
         String fileName = "csv/products" + nbCsvFile + ".csv";
@@ -41,7 +42,7 @@ public class CsvFileSplitter {
             // process the line.
             out.println(line);
             nbLineRead++;
-            if (nbLineRead > 300) {
+            if (nbLineRead > nbProductByFile) {
                 nbCsvFile++;
                 nbLineRead = 0;
                 fileName = "csv/products" + nbCsvFile + ".csv";

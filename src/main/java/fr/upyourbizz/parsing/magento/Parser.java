@@ -3,11 +3,14 @@
  */
 package fr.upyourbizz.parsing.magento;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -94,7 +97,7 @@ public class Parser {
             mapTmp = mapNewSubCategory;
         }
 
-        List<Article> listeArticle = new ArrayList<Article>();
+        Map<String, Article> listeArticle = new HashMap<String, Article>();
         for (Entry<Category, List<Category>> category : navigation.getMapNavigation().entrySet()) {
             // System.out.println("Categorie = " + category.getKey().getName());
             for (Category subCategory : category.getValue()) {
@@ -105,8 +108,16 @@ public class Parser {
                         documentHTML = reader.readFileOrUrl(url);
                         if (documentHTML != null) {
                             Article article = ParserArticle.parserInformationArticle(documentHTML);
-                            article.setCategorie(subCategory.calculateProductCategoriesCsv());
-                            listeArticle.add(article);
+                            article.setCategorie(subCategory.getName());
+                            String mapKey = article.getCategorie() + article.getNom();
+                            if (!listeArticle.containsKey(mapKey)) {
+                                listeArticle.put(mapKey, article);
+                            }
+                            else {
+                                logger.warn("Produit: " + article.getCategorie() + ","
+                                        + article.getNom() + " déjà présent");
+                            }
+
                         }
                     }
                     catch (IOException e) {
@@ -116,13 +127,40 @@ public class Parser {
             }
         }
 
+        List<Article> listeArticleAAjouter = retirerArticleDejaPresents(new ArrayList<Article>(
+                listeArticle.values()));
         try {
             ExportCategories.createCategoriesCsvFile(navigation.getMapNavigation());
-            ExportProducts.createProductsCsvFile(listeArticle);
+            ExportProducts.createProductsCsvFile(listeArticleAAjouter);
         }
         catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private List<Article> retirerArticleDejaPresents(List<Article> listeArticle) throws IOException {
+        BufferedReader br = new BufferedReader(new FileReader("csv/produitsExistants.csv"));
+        String line;
+        List<String> productNameList = new ArrayList<String>();
+        while ((line = br.readLine()) != null) {
+            // process the line.
+            productNameList.add(line.replace("\"", ""));
+        }
+        logger.info("Nombre d'article déjà présent en base de données:" + productNameList.size());
+        Iterator<Article> it = listeArticle.iterator();
+        int nbArticleTrouve = 0;
+        while (it.hasNext()) {
+            Article article = it.next();
+            if (productNameList.contains(article.getNom())) {
+                nbArticleTrouve++;
+                it.remove();
+            }
+        }
+        logger.info("Nb articles déjà présent trouvés = " + nbArticleTrouve);
+        logger.info("Nb articles restant = " + listeArticle.size());
+        br.close();
+
+        return listeArticle;
     }
 
     private void extractSubCategoriesImg() {

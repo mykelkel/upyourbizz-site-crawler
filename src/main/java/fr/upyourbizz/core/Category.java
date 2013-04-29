@@ -3,7 +3,6 @@
  */
 package fr.upyourbizz.core;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import com.google.common.base.Objects;
@@ -80,25 +79,6 @@ public class Category {
         categoryName = categoryName.replace("{", "");
         categoryName = categoryName.replace("}", "");
         return categoryName;
-    }
-
-    public String calculateProductCategoriesCsv() {
-        LinkedList<String> lList = new LinkedList<String>();
-        lList.add(name);
-        Category parentCategorySave = parentCategory;
-        while (parentCategory != null) {
-            lList.addFirst(parentCategory.getName());
-            parentCategory = parentCategory.getParentCategory();
-        }
-        parentCategory = parentCategorySave;
-        StringBuilder productCategoriesCsv = new StringBuilder();
-        for (String categoryName : lList) {
-            if (productCategoriesCsv.length() > 0) {
-                productCategoriesCsv.append(",");
-            }
-            productCategoriesCsv.append(categoryName);
-        }
-        return productCategoriesCsv.toString();
     }
 
     @Override

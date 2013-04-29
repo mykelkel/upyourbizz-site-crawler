@@ -58,7 +58,7 @@ public class App {
             e.printStackTrace();
         }
         try {
-            CsvFileSplitter.splitCsvFile("csv/products.csv");
+            CsvFileSplitter.splitProductsCsvFile("csv/products.csv", 1500);
         }
         catch (IOException e) {
             e.printStackTrace();
