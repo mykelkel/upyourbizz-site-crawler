@@ -14,4 +14,9 @@
 		<property name="contexte" ref="contexte" />
 		<property name="reader" ref="reader" />
 	</bean>
+		<bean id="pharmacieParser" class="fr.upyourbizz.parsing.pharmacie.PharmacieParser">
+		<property name="navigation" ref="navigation" />
+		<property name="contexte" ref="contexte" />
+		<property name="reader" ref="reader" />
+	</bean>
 </beans>

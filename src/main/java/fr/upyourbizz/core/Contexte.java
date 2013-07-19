@@ -28,6 +28,8 @@ public class Contexte {
 
     private boolean downloadFileIfMissing = true;
 
+    private String baseUrlForPostRequest = "";
+
     /**
      * Retourne webSiteParseResultFolder
      * 
@@ -116,5 +118,23 @@ public class Contexte {
      */
     public void setDownloadFileIfMissing(boolean downloadFileIfMissing) {
         this.downloadFileIfMissing = downloadFileIfMissing;
+    }
+
+    /**
+     * Retourne baseUrlForPostRequest
+     * 
+     * @return baseUrlForPostRequest
+     */
+    public String getBaseUrlForPostRequest() {
+        return baseUrlForPostRequest;
+    }
+
+    /**
+     * Affecte baseUrlForPostRequest
+     * 
+     * @param baseUrlForPostRequest baseUrlForPostRequest à affecter
+     */
+    public void setBaseUrlForPostRequest(String baseUrlForPostRequest) {
+        this.baseUrlForPostRequest = baseUrlForPostRequest;
     }
 }

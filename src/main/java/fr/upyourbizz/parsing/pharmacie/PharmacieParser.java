@@ -1,7 +1,7 @@
 /*
  * © 2013, Upyourbizz - Tous droits réservés
  */
-package fr.upyourbizz.parsing.magento;
+package fr.upyourbizz.parsing.pharmacie;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -15,7 +15,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,11 +34,11 @@ import fr.upyourbizz.utils.Reader;
 /**
  * @author Mikaël THIBAULT
  */
-public class Parser {
+public class PharmacieParser {
 
     // ===== Attributs statiques ==============================================
 
-    private static Logger logger = LoggerFactory.getLogger(Parser.class);
+    private static Logger logger = LoggerFactory.getLogger(PharmacieParser.class);
 
     // ===== Méthodes statiques ===============================================
 
@@ -64,42 +67,24 @@ public class Parser {
         File homePage = saveHomePageOnDisk(contexte.getWebSiteUrl(),
                 contexte.getWebSiteParseResultFolder());
         parseHomePageFromDisk(homePage);
-        extractSubCategoriesImg();
         // navigation.extraireLienSousCategorie();
         Map<Category, List<Category>> mapTmp = new HashMap<Category, List<Category>>();
         for (Entry<Category, List<Category>> category : navigation.getMapNavigation().entrySet()) {
             System.out.print(category.getKey().getName());
-            if (category.getKey().getName().equalsIgnoreCase("DJ SHOP")) {
+            if (category.getKey().getName().equalsIgnoreCase("Santé")) {
                 mapTmp.put(category.getKey(), category.getValue());
             }
         }
         // mapTmp.putAll(navigation.getMapNavigation());
 
-        while (!mapTmp.isEmpty()) {
-            Map<Category, List<Category>> mapNewSubCategory = new HashMap<Category, List<Category>>();
-            for (Entry<Category, List<Category>> category : mapTmp.entrySet()) {
-                // Category
-                for (Category subCategory : category.getValue()) {
-                    ResultatParsingSousCategorie resultatParsingSousCategorie = parseSubCategoryFromDisk(
-                            subCategory, true);
-                    subCategory.setUrlRelatedProducts(resultatParsingSousCategorie.getListeUrlArticlesTrouves());
+        Map<Category, List<Category>> mapNewSubCategory = new HashMap<Category, List<Category>>();
+        for (Entry<Category, List<Category>> category : mapTmp.entrySet()) {
+            // Category
+            for (Category subCategory : category.getValue()) {
+                PharmacieResultatParsingSousCategorie resultatParsingSousCategorie = parseSubCategoryFromDisk(
+                        subCategory, true);
+                subCategory.setUrlRelatedProducts(resultatParsingSousCategorie.getListeUrlArticlesTrouves());
 
-                    if (!resultatParsingSousCategorie.getMapAutresSousCategories().isEmpty()) {
-                        for (Entry<Category, List<Category>> newCategory : resultatParsingSousCategorie.getMapAutresSousCategories().entrySet()) {
-                            if (!navigation.getMapNavigation().containsKey(newCategory)) {
-                                navigation.getMapNavigation().put(newCategory.getKey(),
-                                        newCategory.getValue());
-                            }
-                            else {
-                                navigation.getMapNavigation().get(newCategory).addAll(
-                                        newCategory.getValue());
-                            }
-                        }
-                        mapNewSubCategory.putAll(resultatParsingSousCategorie.getMapAutresSousCategories());
-
-                    }
-                }
-                mapTmp = mapNewSubCategory;
             }
         }
 
@@ -114,7 +99,7 @@ public class Parser {
                         try {
                             documentHTML = reader.readFileOrUrl(url);
                             if (documentHTML != null) {
-                                Article article = ParserArticle.parserInformationArticle(documentHTML);
+                                Article article = PharmacieParserArticle.parserInformationArticle(documentHTML);
                                 article.setCategorie(subCategory.getName());
                                 String mapKey = article.getCategorie() + article.getNom();
                                 if (!listeArticle.containsKey(mapKey)) {
@@ -172,11 +157,6 @@ public class Parser {
         return listeArticle;
     }
 
-    private void extractSubCategoriesImg() {
-        // TODO Auto-generated method stub
-
-    }
-
     private File saveHomePageOnDisk(String url, String destinationFolder)
             throws MalformedURLException, IOException {
         if (url != null && !url.isEmpty() && !destinationFolder.isEmpty()) {
@@ -191,7 +171,7 @@ public class Parser {
     private void parseHomePageFromDisk(File homePage) {
 
         try {
-            Navigation navigationTmp = ParseHomePage.parseHomePageFromDisk(homePage);
+            Navigation navigationTmp = PharmacieParseHomePage.parseHomePageFromDisk(homePage);
             navigation.setMapNavigation(navigationTmp.getMapNavigation());
         }
         catch (IOException e) {
@@ -199,23 +179,27 @@ public class Parser {
         }
     }
 
-    private ResultatParsingSousCategorie parseSubCategoryFromDisk(Category subCategory,
+    private PharmacieResultatParsingSousCategorie parseSubCategoryFromDisk(Category subCategory,
             boolean downloadFileIfMissing) {
-        ResultatParsingSousCategorie resultatParsingSousCategorie = new ResultatParsingSousCategorie();
+        PharmacieResultatParsingSousCategorie resultatParsingSousCategorie = new PharmacieResultatParsingSousCategorie();
         try {
-            Document documentHTML = reader.readFileOrUrl(subCategory.getUrl());
-            resultatParsingSousCategorie = ParserSousCategorie.parserSousCategorie(subCategory,
-                    documentHTML, true);
-            List<String> urlsSousPage = resultatParsingSousCategorie.getListeAutrePagesAParserMemeCategorie();
-            if (!urlsSousPage.isEmpty()) {
-                for (String urlSousPage : urlsSousPage) {
-                    documentHTML = reader.readFileOrUrl(urlSousPage);
-                    ResultatParsingSousCategorie resultatParsingSousCategoriePageSupplementaire = ParserSousCategorie.parserSousCategorie(
-                            null, documentHTML, false);
-                    resultatParsingSousCategorie.getListeUrlArticlesTrouves().addAll(
-                            resultatParsingSousCategoriePageSupplementaire.getListeUrlArticlesTrouves());
+            String uri_string = subCategory.getUrl().replace(contexte.getWebSiteUrl() + "/", "");
+            String[] urlSplit = uri_string.split("/");
+            String idCategory = urlSplit[3];
+            Document subCategoryDoc = Jsoup.connect(contexte.getBaseUrlForPostRequest()).data(
+                    "category_id", idCategory).data("offset", "0").data("params[per_page]", "0").data(
+                    "uri_string", uri_string).post();
+            Elements productList = subCategoryDoc.select("div.product_content");
+            for (Element product : productList) {
+                Element productTitle = product.select("h3.product_title").first();
+                Element link = productTitle.getElementsByTag("a").first();
+                if (link != null) {
+                    String linkHref = link.attr("href");
+                    resultatParsingSousCategorie.getListeUrlArticlesTrouves().add(linkHref);
                 }
             }
+            System.out.println("Categorie: " + subCategory.getName() + "Nombre articles = "
+                    + productList.size());
 
         }
         catch (IOException e) {

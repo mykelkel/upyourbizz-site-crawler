@@ -33,7 +33,7 @@ public class ExportProducts {
         try {
             PrintWriter out = new PrintWriter(new FileWriter("csv/products.csv"));
             for (Article article : productsList) {
-                out.print("0;" + "\"" + article.getCategorie() + "\"" + Consts.CSV_ITEM_SEPARATOR
+                out.print("1;" + "\"" + article.getCategorie() + "\"" + Consts.CSV_ITEM_SEPARATOR
                         + "\"" + article.getNom() + "\"" + Consts.CSV_ITEM_SEPARATOR + "\""
                         + article.getPrix() + "\"" + Consts.CSV_ITEM_SEPARATOR + "\""
                         + article.getMarque() + "\"" + Consts.CSV_ITEM_SEPARATOR);
